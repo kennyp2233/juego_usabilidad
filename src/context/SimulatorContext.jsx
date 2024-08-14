@@ -7,13 +7,14 @@ export const SimulatorProvider = ({ children }) => {
     const [gameMode, setGameMode] = useState(null);
     const [peas, setPeas] = useState([]);
     const [currentScreen, setCurrentScreen] = useState('home');
-
+    const [menuOpen, setMenuOpen] = useState(true);
 
     return (
         <SimulatorContext.Provider value={{
             gameMode, setGameMode,
             peas, setPeas,
-            currentScreen, setCurrentScreen
+            currentScreen, setCurrentScreen,
+            menuOpen, setMenuOpen,
 
         }}>
             {children}

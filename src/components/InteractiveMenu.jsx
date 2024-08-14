@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PlayCircle, Beaker, Settings, Info, Menu } from 'lucide-react';
+import { PlayCircle, Beaker, Settings, Info } from 'lucide-react';
 import { useSimulator } from '../context/SimulatorContext';
 import Button from './atoms/Button';
 import { useSoundEffects } from '../hooks/useSoundEffects';
@@ -7,40 +7,30 @@ import { useSoundEffects } from '../hooks/useSoundEffects';
 import Doc from '../images/personajes/doctor.png';
 
 const CentralMenu = () => {
-    const { gameMode, setGameMode, setCurrentScreen } = useSimulator();
-    const [isMenuOpen, setIsMenuOpen] = useState(true);
+    const { gameMode, setGameMode, setCurrentScreen, menuOpen, setMenuOpen } = useSimulator();
     const { playButtonClick, playSqueak } = useSoundEffects();
+
     const handleModeSelect = (mode) => {
         setGameMode(mode);
         setCurrentScreen(mode === 'narrative' ? 'intro' : 'sandbox');
-        setIsMenuOpen(false);
+        setMenuOpen(false);
     };
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
 
     return (
-        <div className="absolute w-full min-h-dvh z-10 flex justify-center items-center">
+        <div className={`absolute w-full min-h-dvh ${menuOpen ? "z-30" : "z-10"}  flex justify-center items-center`}>
             {/* Overlay semi-transparente */}
-            {isMenuOpen && (
+            {menuOpen && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-50"
-                    onClick={toggleMenu}
+                    onClick={() => setMenuOpen(false)}
                     style={{ pointerEvents: 'auto' }} // Asegúrate de que el overlay no bloquee interacciones
                 />
             )}
 
-            {/* Botón para abrir/cerrar el menú */}
-            <button
-                onClick={toggleMenu}
-                className={`absolute z-50 top-4 right-4 p-2 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 ${isMenuOpen ? 'rotate-45' : 'rotate-0'}`}
-            >
-                <Menu size={24} />
-            </button>
 
             {/* Menú central */}
-            <div className={`relative w-fit h-fit bg-white rounded-lg shadow-2xl p-8 transform transition-all duration-300 ${isMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
+            <div className={`relative w-fit h-fit bg-white rounded-lg shadow-2xl p-8 transform transition-all duration-300 ${menuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
                 <h1 className="text-3xl font-bold text-green-700 mb-6">Genética de Guisantes</h1>
 
                 <div className="space-y-4">

@@ -1,4 +1,3 @@
-// Definición de los genotipos de guisantes
 export const peaGenotypes = {
     'verde-liso': { color: 'VV', texture: 'LL' },
     'amarillo-liso': { color: 'vv', texture: 'LL' },
@@ -9,7 +8,7 @@ export const peaGenotypes = {
 class Laboratory {
     constructor() {
         this.generationHistory = [];
-        this.currentAllCombinations = [];
+        
     }
 
     generateAllCombinations(gene1, gene2) {
@@ -33,16 +32,16 @@ class Laboratory {
         const colorCombinations = this.generateAllCombinations(genotype1.color, genotype2.color);
         const textureCombinations = this.generateAllCombinations(genotype1.texture, genotype2.texture);
 
-        this.currentAllCombinations = colorCombinations.flatMap(color => 
+        const allCombinations = colorCombinations.flatMap(color => 
             textureCombinations.map(texture => ({ color, texture }))
         );
 
         // Seleccionar aleatoriamente 4 de las 16 combinaciones
         const selectedCombinations = [];
         for (let i = 0; i < 4; i++) {
-            if (this.currentAllCombinations.length > 0) {
-                const randomIndex = Math.floor(Math.random() * this.currentAllCombinations.length);
-                selectedCombinations.push(this.currentAllCombinations.splice(randomIndex, 1)[0]);
+            if (allCombinations.length > 0) {
+                const randomIndex = Math.floor(Math.random() * allCombinations.length);
+                selectedCombinations.push(allCombinations.splice(randomIndex, 1)[0]);
             }
         }
 
@@ -56,41 +55,48 @@ class Laboratory {
             parent2Genotype,
             ...childrenGenotypes
         ];
-        this.generationHistory.push(generation);
-        return generation.map(genotype => ({
+        
+        const generationWithPhenotypes = generation.map(genotype => ({
             genotype: genotype,
             phenotype: this.determinePhenotype(genotype)
         }));
+
+        this.generationHistory.push(generationWithPhenotypes);
+        return generationWithPhenotypes;
+    }
+
+    getAllGenerations() {
+        return this.generationHistory;
     }
 
     getGeneration(index) {
-        const generation = this.generationHistory[index];
-        if (generation) {
-            return generation.map(genotype => ({
-                genotype: genotype,
-                phenotype: this.determinePhenotype(genotype)
-            }));
-        }
-        return null;
+        return this.generationHistory[index] || null;
     }
 
-    selectForNextGeneration(index, childIndex) {
-        const generation = this.generationHistory[index];
-        if (generation) {
-            const [parent1, parent2, ...children] = generation;
-            const selectedChild = children[childIndex];
-            this.generationHistory.splice(index, 1);
-            return [parent1, parent2, selectedChild];
-        }
-        return null;
+    getPeaFromGeneration(generationIndex, peaIndex) {
+        const generation = this.getGeneration(generationIndex);
+        return generation ? generation[peaIndex] : null;
     }
 
-    getAllCombinations() {
-        return this.currentAllCombinations.map(genotype => ({
-            genotype: genotype,
-            phenotype: this.determinePhenotype(genotype)
-        }));
+    createNewGenerationFromSelection(parent1, parent2) {
+        return this.generateNewGeneration(parent1.genotype, parent2.genotype);
+    }
+
+    getAllCombinations(parent1Genotype, parent2Genotype) {
+        const colorCombinations = this.generateAllCombinations(parent1Genotype.color, parent2Genotype.color);
+        const textureCombinations = this.generateAllCombinations(parent1Genotype.texture, parent2Genotype.texture);
+
+        // Generar todas las combinaciones posibles
+        const allCombinations = colorCombinations.flatMap(color => 
+            textureCombinations.map(texture => ({
+                genotype: { color, texture },
+                phenotype: this.determinePhenotype({ color, texture })
+            }))
+        );
+
+        return allCombinations;  // Devolver todas las combinaciones con fenotipos
     }
 }
 
 export default Laboratory;
+

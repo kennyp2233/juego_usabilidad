@@ -5,6 +5,8 @@ import CentralMenu from './components/InteractiveMenu';
 import { useSoundEffects } from './hooks/useSoundEffects';
 import VideoFondo from './videos/fondo.mp4';
 import GameScreen from './components/GameScreen';
+import MenuButton from './components/MenuButton';
+
 const App = () => {
   const { playAmbience } = useSoundEffects();
 
@@ -18,7 +20,9 @@ const App = () => {
   }, [soundInitialized, playAmbience]);
   return (
     <SimulatorProvider>
-      <div className="app relative min-h-screen bg-gray-100">
+
+      <div className="app relative h-dvh bg-gray-100">
+        <MenuButton />
         {/* Video de Fondo */}
         <video
           className="absolute top-0 left-0 w-full h-full object-cover"
@@ -38,10 +42,10 @@ const App = () => {
         {/* Contenido Principal */}
         <div className="relative z-10">
           <CentralMenu />
-          <div className="absolute z-20">
-
+          <div className="absolute h-dvh z-20 overflow-y-auto w-full p-20 flex flex-col justify-center items-center">
 
             <GameScreen />
+
           </div>
 
 
