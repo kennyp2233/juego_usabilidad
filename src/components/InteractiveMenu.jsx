@@ -37,7 +37,7 @@ const CentralMenu = () => {
                     <Button
                         onClick={() => handleModeSelect('narrative')}
                         icon={PlayCircle}
-                        label="Modo Narrativo"
+                        label="Modo Tutorial"
                         bgColor="bg-green-100"
                     />
                     <Button

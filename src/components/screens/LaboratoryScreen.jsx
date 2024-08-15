@@ -5,7 +5,7 @@ import VerdeLiso from '../../images/personajes/verde-liso.png';
 import VerdeRugoso from '../../images/personajes/verde-rugoso.png';
 import AmarilloRugoso from '../../images/personajes/amarillo-rugoso.png';
 import AmarilloLiso from '../../images/personajes/amarillo-liso.png';
-
+import Principal from '../../images/personajes/doctor.png';
 import Genotype1 from '../../images/geno/Genotype1.png';
 import Genotype2 from '../../images/geno/Genotype2.png';
 import Genotype3 from '../../images/geno/Genotype3.png';
@@ -26,7 +26,31 @@ import TooltipButton from '../TooltipButton';
 
 import { useSoundEffects } from '../../hooks/useSoundEffects';
 import CombinationsTable from '../CombinationsTable';
+import { useSimulator } from '../../context/SimulatorContext';
+const phenotypeToImageMap = {
+  'verde-liso': VerdeLiso,
+  'verde-rugoso': VerdeRugoso,
+  'amarillo-liso': AmarilloLiso,
+  'amarillo-rugoso': AmarilloRugoso,
+};
+
+const genotypeToImageMap = {
+  'VVLL': Genotype1,
+  'VVLl': Genotype2,
+  'VvLL': Genotype3,
+  'VvLl': Genotype4,
+  'VVll': Genotype5,
+  'Vvll': Genotype6,
+  'vvLL': Genotype7,
+  'vvLl': Genotype8,
+  'vvll': Genotype9,
+};
+
 const PeaGeneticsSimulator = () => {
+
+  const [tutorialStep, setTutorialStep] = useState(0);
+
+
   const [lab] = useState(new Laboratory());
   const [generations, setGenerations] = useState([]);
   const [combinations, setCombinations] = useState({ parentsSelected: { parent1: null, parent2: null }, combinations: [] });
@@ -36,25 +60,23 @@ const PeaGeneticsSimulator = () => {
   const lastGenerationRef = useRef(null);  // Referencia para la última generación
   const [showGenotype, setShowGenotype] = useState(false);
   const { playMixPeas, playButtonClick, playHover, playSqueak, playPopFinish } = useSoundEffects();
+  const { currentScreen, setCurrentScreen } = useSimulator();
+  const [isTutorial, setIsTutorial] = useState(true);
 
-  const phenotypeToImageMap = {
-    'verde-liso': VerdeLiso,
-    'verde-rugoso': VerdeRugoso,
-    'amarillo-liso': AmarilloLiso,
-    'amarillo-rugoso': AmarilloRugoso,
+
+
+  const nextTutorialStep = () => {
+    if (tutorialStep < tutorialSteps.length - 1) {
+      setTutorialStep(tutorialStep + 1);
+    } else {
+      setIsTutorial(false); // Termina el tutorial
+    }
   };
 
-  const genotypeToImageMap = {
-    'VVLL': Genotype1,
-    'VVLl': Genotype2,
-    'VvLL': Genotype3,
-    'VvLl': Genotype4,
-    'VVll': Genotype5,
-    'Vvll': Genotype6,
-    'vvLL': Genotype7,
-    'vvLl': Genotype8,
-    'vvll': Genotype9,
-  };
+  useEffect(() => {
+    setIsTutorial(currentScreen === 'intro');
+  }, [currentScreen]);
+
 
   const getGenotypeKey = (genotype) => {
     const colorAllele = genotype.color === 'VV' ? 'VV' : genotype.color === 'Vv' ? 'Vv' : 'vv';
@@ -89,6 +111,28 @@ const PeaGeneticsSimulator = () => {
     setGenerations([newGeneration]);
   };
 
+  const tutorialSteps = [
+    {
+      text: "Bienvenido al simulador de genética de guisantes. En este tutorial, te enseñaré cómo usar cada función.",
+      action: () => { }, // Acción opcional para cada paso
+      canProceed: () => true, // Se puede avanzar en cualquier momento
+    },
+    {
+      text: "Para empezar, presiona el botón 'Iniciar Simulación' para generar dos guisantes de la primera generación.",
+      action: () => handleInitialGeneration(),
+      canProceed: () => generations.length > 0, // Avanza cuando la generación inicial se ha creado
+    },
+    {
+      text: "Luego podrás ver las combinaciones posibles y el fenotipo de los nuevos guisantes.",
+      action: () => setShowCombinations(true),
+      canProceed: () => showCombinations, // Avanza cuando se muestran las combinaciones
+    },
+    {
+      text: "¡Eso es todo por ahora! Si tienes alguna pregunta, no dudes en preguntarla.",
+      action: () => { },
+      canProceed: () => true, // Se puede avanzar en cualquier momento
+    },
+  ];
 
   const handlePeaSelection = (generationIndex, peaIndex) => {
     const selectedPea = lab.getPeaFromGeneration(generationIndex, peaIndex);
@@ -192,10 +236,53 @@ const PeaGeneticsSimulator = () => {
     playButtonClick();
   };
 
-
+  useEffect(() => {
+    console.log(isTutorial)
+  }, [])
 
   return (
-    <NeonGradientCard className="mx-auto my-auto ">
+    <NeonGradientCard className="relative mx-auto my-auto ">
+      {isTutorial && (
+        <motion.div
+          className="absolute -top-1/2 bg-white p-4 rounded-lg shadow-md text-center mb-10 cursor-grab z-50"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          drag  // Permite arrastrar el div
+          dragConstraints={{ top: -200, bottom: 500, left: -500, right: 500 }} // Ajusta los límites de arrastre según sea necesario
+          dragElastic={0.2} // Controla la elasticidad del arrastre
+          whileDrag={{ scale: 1.05, boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)" }} // Efecto visual durante el arrastre
+        >
+          <div className="flex justify-center items-center w-full">
+
+            <img
+              src={Principal}
+              alt="Personaje del juego"
+              className="w-20 h-auto animate-move-up-down hover:animate-move-up-down-shake"
+              onPointerEnter={playSqueak}
+            />
+          </div>
+          <p className='text-xl'>{tutorialSteps[tutorialStep].text}</p>
+
+          <button
+            onClick={nextTutorialStep}
+            disabled={!tutorialSteps[tutorialStep].canProceed()}
+            className={`bg-green-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 mt-4
+    ${!tutorialSteps[tutorialStep].canProceed() ? 'opacity-50 cursor-not-allowed' : ''}
+  `}
+          >
+            Siguiente
+          </button>
+
+          <button
+            onClick={() => setIsTutorial(false)}
+            className=" bg-red-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-green-500 mt-4 ml-4"
+          >
+            Saltar Tutorial
+          </button>
+        </motion.div>
+      )}
+
       <motion.div
         className="text-2xl font-bold mb-1 text-green-800 flex justify-between items-start"
         initial={{ opacity: 0, y: -20 }}
