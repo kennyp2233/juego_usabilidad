@@ -4,8 +4,12 @@ import { useSimulator } from "../context/SimulatorContext";
 export default function GameScreen() {
 
     const { gameMode, setGameMode, currentScreen, menuOpen, setMenuOpen } = useSimulator();
-    if (currentScreen !== 'sandbox' || currentScreen !== 'intro') {
-        return null;
+    if (currentScreen === 'sandbox' || currentScreen === 'intro') {
+        return (
+            <LaboratoryScreen />
+        );
     }
-    return <LaboratoryScreen />;
+
+    return null;
+
 }
