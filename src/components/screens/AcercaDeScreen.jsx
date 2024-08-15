@@ -34,7 +34,7 @@ const AcercaDeScreen = () => {
                     <p className="mt-4 text-lg">¡Diviértete y aprende sobre la genética!</p>
                 </div>
                 {/* Imágenes de personajes */}
-                <div className="md:w-1/2 relative">
+                <div className="md:w-1/2 relative" aria-hidden="true">
                     <motion.img
                         src={VerdeLiso}
                         alt="Guisante Verde Liso"

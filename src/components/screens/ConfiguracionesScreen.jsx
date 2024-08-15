@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaVolumeUp, FaVolumeMute } from 'react-icons/fa'; // Íconos de volumen
+import { FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
 import { useSoundContext } from '../../context/SonidoContext';
 import { useSimulator } from '../../context/SimulatorContext';
 
@@ -16,7 +16,7 @@ const ConfiguracionScreen = () => {
             <div className="flex flex-col md:flex-row items-center">
                 {/* Controles de volumen */}
                 <div className="md:w-1/2 p-4 flex items-center">
-                    <FaVolumeUp className="text-green-500 mr-2" size={24} />
+                    <FaVolumeUp className="text-green-500 mr-2" size={24} aria-hidden="true" />
                     <div className="flex-1">
                         <h3 className="text-xl font-semibold mb-4 text-green-800">Volumen música</h3>
                         <input
@@ -26,6 +26,8 @@ const ConfiguracionScreen = () => {
                             value={volume}
                             onChange={(e) => handleVolumeChange(e.target.value)}
                             className="w-full"
+                            aria-label="Control de volumen de música"
+                            aria-live="polite"
                             disabled={isMuted}
                         />
                         <p className="text-lg mt-2 text-green-600">Nivel de volumen: {volume}</p>
@@ -37,8 +39,9 @@ const ConfiguracionScreen = () => {
                         onClick={toggleMute}
                         className={`flex items-center px-4 py-2 rounded-lg text-white ${isMuted ? 'bg-green-600' : 'bg-green-400'} hover:bg-opacity-80`}
                         whileHover={{ scale: 1.05 }}
+                        aria-label={isMuted ? 'Desactivar Silencio' : 'Silenciar'}
                     >
-                        {isMuted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
+                        {isMuted ? <FaVolumeMute size={24} aria-hidden="true" /> : <FaVolumeUp size={24} aria-hidden="true" />}
                         <span className="ml-2">{isMuted ? 'Desactivar Silencio' : 'Silenciar'}</span>
                     </motion.button>
                 </div>
