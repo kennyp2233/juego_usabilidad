@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/juego_usabilidad/static/css/main.f5666f7d.css",
-    "main.js": "/juego_usabilidad/static/js/main.26264082.js",
+    "main.js": "/juego_usabilidad/static/js/main.968f452f.js",
     "static/js/453.63d2ce53.chunk.js": "/juego_usabilidad/static/js/453.63d2ce53.chunk.js",
     "static/media/ambience.mp3": "/juego_usabilidad/static/media/ambience.e67826967f55d7c8fd47.mp3",
     "static/media/fondo.mp4": "/juego_usabilidad/static/media/fondo.0223ead774da006d0100.mp4",
@@ -26,11 +26,11 @@
     "static/media/pop.mp3": "/juego_usabilidad/static/media/pop.e80e5e753230e96391dd.mp3",
     "index.html": "/juego_usabilidad/index.html",
     "main.f5666f7d.css.map": "/juego_usabilidad/static/css/main.f5666f7d.css.map",
-    "main.26264082.js.map": "/juego_usabilidad/static/js/main.26264082.js.map",
+    "main.968f452f.js.map": "/juego_usabilidad/static/js/main.968f452f.js.map",
     "453.63d2ce53.chunk.js.map": "/juego_usabilidad/static/js/453.63d2ce53.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f5666f7d.css",
-    "static/js/main.26264082.js"
+    "static/js/main.968f452f.js"
   ]
 }
