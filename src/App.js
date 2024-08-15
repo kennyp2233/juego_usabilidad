@@ -6,7 +6,7 @@ import { useSoundEffects } from './hooks/useSoundEffects';
 import VideoFondo from './videos/fondo.mp4';
 import GameScreen from './components/GameScreen';
 import MenuButton from './components/MenuButton';
-
+import AcercaDeScreen from './components/screens/AcercaDeScreen';
 const App = () => {
   const { playAmbience } = useSoundEffects();
 
@@ -18,6 +18,7 @@ const App = () => {
 
     playAmbience();
   }, [soundInitialized, playAmbience]);
+
   return (
     <SimulatorProvider>
 
@@ -45,7 +46,7 @@ const App = () => {
           <div className="absolute h-dvh z-20 overflow-y-auto w-full p-20 flex flex-col justify-center items-center">
 
             <GameScreen />
-
+            <AcercaDeScreen />
           </div>
 
 

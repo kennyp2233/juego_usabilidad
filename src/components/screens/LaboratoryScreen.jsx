@@ -5,11 +5,25 @@ import VerdeLiso from '../../images/personajes/verde-liso.png';
 import VerdeRugoso from '../../images/personajes/verde-rugoso.png';
 import AmarilloRugoso from '../../images/personajes/amarillo-rugoso.png';
 import AmarilloLiso from '../../images/personajes/amarillo-liso.png';
+
+import Genotype1 from '../../images/geno/Genotype1.png';
+import Genotype2 from '../../images/geno/Genotype2.png';
+import Genotype3 from '../../images/geno/Genotype3.png';
+import Genotype4 from '../../images/geno/Genotype4.png';
+import Genotype5 from '../../images/geno/Genotype5.png';
+import Genotype6 from '../../images/geno/Genotype6.png';
+import Genotype7 from '../../images/geno/Genotype7.png';
+import Genotype8 from '../../images/geno/Genotype8.png';
+import Genotype9 from '../../images/geno/Genotype9.png';
+
 import { ArrowRight } from 'lucide-react';
 import { GiDna1 } from 'react-icons/gi'; // Ícono de gen (ADN)
 import { Table2Icon } from 'lucide-react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { NeonGradientCard } from '../NeonCard';
+import { BiReset } from 'react-icons/bi';
+import TooltipButton from '../TooltipButton';
+
 import { useSoundEffects } from '../../hooks/useSoundEffects';
 import CombinationsTable from '../CombinationsTable';
 const PeaGeneticsSimulator = () => {
@@ -20,6 +34,7 @@ const PeaGeneticsSimulator = () => {
   const [showMixingAnimation, setShowMixingAnimation] = useState(false);
   const [showCombinations, setShowCombinations] = useState(false);
   const lastGenerationRef = useRef(null);  // Referencia para la última generación
+  const [showGenotype, setShowGenotype] = useState(false);
   const { playMixPeas, playButtonClick, playHover, playSqueak, playPopFinish } = useSoundEffects();
 
   const phenotypeToImageMap = {
@@ -27,6 +42,24 @@ const PeaGeneticsSimulator = () => {
     'verde-rugoso': VerdeRugoso,
     'amarillo-liso': AmarilloLiso,
     'amarillo-rugoso': AmarilloRugoso,
+  };
+
+  const genotypeToImageMap = {
+    'VVLL': Genotype1,
+    'VVLl': Genotype2,
+    'VvLL': Genotype3,
+    'VvLl': Genotype4,
+    'VVll': Genotype5,
+    'Vvll': Genotype6,
+    'vvLL': Genotype7,
+    'vvLl': Genotype8,
+    'vvll': Genotype9,
+  };
+
+  const getGenotypeKey = (genotype) => {
+    const colorAllele = genotype.color === 'VV' ? 'VV' : genotype.color === 'Vv' ? 'Vv' : 'vv';
+    const textureAllele = genotype.texture === 'LL' ? 'LL' : genotype.texture === 'Ll' ? 'Ll' : 'll';
+    return `${colorAllele}${textureAllele}`;
   };
 
   const handleInitialGeneration = () => {
@@ -131,16 +164,38 @@ const PeaGeneticsSimulator = () => {
   const handleCancelSelection = () => {
     setSelectedParents({ parent1: null, parent2: null });
   };
+
   useEffect(() => {
     if (lastGenerationRef.current) {
       lastGenerationRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [generations])
 
+  const handleShowCombinations = () => {
+    setShowCombinations(!showCombinations);
+    playButtonClick();
+  };
+
+  const handleShowGenotype = () => {
+    setShowGenotype(!showGenotype);
+    playButtonClick();
+  };
+
+  const handleReset = () => {
+    setGenerations([]);
+    setCombinations({
+      parentsSelected: { parent1: null, parent2: null },
+      combinations: [],
+    });
+    setSelectedParents({ parent1: null, parent2: null });
+    lab.resetGenerations();
+    playButtonClick();
+  };
+
 
 
   return (
-    <NeonGradientCard className="mx-auto my-auto">
+    <NeonGradientCard className="mx-auto my-auto ">
       <motion.div
         className="text-2xl font-bold mb-1 text-green-800 flex justify-between items-start"
         initial={{ opacity: 0, y: -20 }}
@@ -184,41 +239,32 @@ const PeaGeneticsSimulator = () => {
         )}
 
         {generations.length > 0 && (
-          <motion.div className='flex justify-center items-end gap-1'
+          <motion.div
+            className="flex justify-center items-end gap-1"
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1 }}>
+            transition={{ duration: 1 }}
+          >
             {!showCombinations && (
-              <motion.button
-                onClick={() => {
-                  setShowCombinations(!showCombinations)
-                  playButtonClick()
-                }}
-                className="bg-green-600 w-fit text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-
-                onMouseEnter={playHover}
-
-              >
-                <Table2Icon className="" size={20} />
-              </motion.button>
+              <TooltipButton
+                onClick={handleShowCombinations}
+                tooltipText="Mostrar combinaciones"
+                Icon={Table2Icon}
+              />
             )}
-            <motion.button
-              onClick={() => {
-                handleInitialGeneration()
-                playButtonClick()
-              }}
-              className="bg-green-600 w-fit text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onMouseEnter={playHover}
-
-            >
-              <GiDna1 className="" size={20} />
-            </motion.button>
+            <TooltipButton
+              onClick={handleShowGenotype}
+              tooltipText="Mostrar genotipo"
+              Icon={GiDna1}
+            />
+            <TooltipButton
+              onClick={handleReset}
+              tooltipText="Reiniciar"
+              Icon={BiReset}
+            />
           </motion.div>
         )}
+
 
 
       </motion.div>
@@ -314,6 +360,7 @@ const PeaGeneticsSimulator = () => {
 
       {!showCombinations && (
         <section className="max-h-80 overflow-y-auto">
+
           {generations.map((generation, genIndex) => (
             <motion.section
               key={genIndex}
@@ -321,10 +368,11 @@ const PeaGeneticsSimulator = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: genIndex * 0.2 }}
-              ref={genIndex === generations.length - 1 ? lastGenerationRef : null}  // Referencia en la última generación
+              ref={genIndex === generations.length - 1 ? lastGenerationRef : null}
             >
               <h2 className="text-xl text-green-600 font-bold mb-2">Generación {genIndex + 1}:</h2>
-              <div className="flex items-center">
+
+              <div className="flex items-center justify-center">
                 {generation.map((pea, peaIndex) => (
                   <React.Fragment key={peaIndex}>
                     {peaIndex === 2 && (
@@ -333,20 +381,12 @@ const PeaGeneticsSimulator = () => {
                       </motion.div>
                     )}
                     <motion.div
-                      key={peaIndex}
                       className={`text-center flex flex-col justify-center items-center cursor-pointer p-4 rounded-lg border ${selectedParents.parent1 === pea || selectedParents.parent2 === pea
                         ? 'border-blue-600'
                         : 'border-transparent'
                         }`}
-                      onClick={() => {
-                        handlePeaSelection(genIndex, peaIndex)
-
-                      }}
-                      onTap={() => {
-                        handlePeaSelection(genIndex, peaIndex)
-
-                      }}
-
+                      onClick={() => handlePeaSelection(genIndex, peaIndex)}
+                      onTap={() => handlePeaSelection(genIndex, peaIndex)}
                       variants={peaVariants}
                       initial="hidden"
                       animate={['visible', standbyAnimation]}
@@ -355,12 +395,17 @@ const PeaGeneticsSimulator = () => {
                       whileTap="tap"
                     >
                       <motion.img
-                        src={phenotypeToImageMap[pea.phenotype]}
-                        alt={pea.phenotype}
+                        src={showGenotype
+                          ? genotypeToImageMap[getGenotypeKey(pea.genotype)]
+                          : phenotypeToImageMap[pea.phenotype]
+                        }
+                        alt={showGenotype ? getGenotypeKey(pea.genotype) : pea.phenotype}
                         className="w-10 h-10 mb-2"
                       />
-                      <p>{pea.phenotype}</p>
-                      <p className="text-sm">{`${pea.genotype.color}, ${pea.genotype.texture}`}</p>
+                      <p>{showGenotype ? getGenotypeKey(pea.genotype) : pea.phenotype}</p>
+                      {!showGenotype && (
+                        <p className="text-sm">{`${pea.genotype.color}, ${pea.genotype.texture}`}</p>
+                      )}
                     </motion.div>
                   </React.Fragment>
                 ))}
@@ -372,7 +417,7 @@ const PeaGeneticsSimulator = () => {
 
       {showCombinations && (
         <section className="max-h-80 overflow-y-auto">
-          <CombinationsTable combinations={combinations} />
+          <CombinationsTable combinations={combinations} showGenotype={showGenotype} />
         </section>
       )}
 

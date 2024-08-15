@@ -23,10 +23,10 @@ const NeonGradientCard = ({
         setDimensions({ width: offsetWidth, height: offsetHeight });
       }
     };
- 
+
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
- 
+
     return () => {
       window.removeEventListener("resize", updateDimensions);
     };
@@ -44,19 +44,19 @@ const NeonGradientCard = ({
       ref={containerRef}
       style={{
         "--border-size": `${borderSize}px`,
-          "--border-radius": `${borderRadius}px`,
-          "--neon-first-color": neonColors.firstColor,
-          "--neon-second-color": neonColors.secondColor,
-          "--card-width": `${dimensions.width}px`,
-          "--card-height": `${dimensions.height}px`,
-          "--card-content-radius": `${borderRadius - borderSize}px`,
-          "--pseudo-element-background-image": `linear-gradient(0deg, ${neonColors.firstColor}, ${neonColors.secondColor})`,
-          "--pseudo-element-width": `${dimensions.width + borderSize * 2}px`,
-          "--pseudo-element-height": `${dimensions.height + borderSize * 2}px`,
-          "--after-blur": `${dimensions.width / 3}px`,
+        "--border-radius": `${borderRadius}px`,
+        "--neon-first-color": neonColors.firstColor,
+        "--neon-second-color": neonColors.secondColor,
+        "--card-width": `${dimensions.width}px`,
+        "--card-height": `${dimensions.height}px`,
+        "--card-content-radius": `${borderRadius - borderSize}px`,
+        "--pseudo-element-background-image": `linear-gradient(0deg, ${neonColors.firstColor}, ${neonColors.secondColor})`,
+        "--pseudo-element-width": `${dimensions.width + borderSize * 2}px`,
+        "--pseudo-element-height": `${dimensions.height + borderSize * 2}px`,
+        "--after-blur": `${dimensions.width / 3}px`,
       }}
       className={
-        "relative z-10 h-fit w-fit rounded-[var(--border-radius)] " + className
+        "relative z-10 h-fit w-fit min-w-[700px] rounded-[var(--border-radius)] " + className
       }
       animate={{ height: 'auto' }}
       transition={{ height: { duration: 2 } }}

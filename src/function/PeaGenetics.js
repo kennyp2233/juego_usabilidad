@@ -96,6 +96,10 @@ class Laboratory {
 
         return allCombinations;  // Devolver todas las combinaciones con fenotipos
     }
+
+    resetGenerations() {
+        this.generationHistory = [];
+    }
 }
 
 export default Laboratory;
