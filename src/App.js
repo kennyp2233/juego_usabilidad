@@ -8,7 +8,7 @@ import GameScreen from './components/GameScreen';
 import MenuButton from './components/MenuButton';
 import AcercaDeScreen from './components/screens/AcercaDeScreen';
 import ConfiguracionScreen from './components/screens/ConfiguracionesScreen';
-
+import CalificacionScreen from './components/screens/CalificacionScreen';
 import { SoundProvider } from './context/SonidoContext';
 const App = () => {
   const { playAmbience } = useSoundEffects();
@@ -47,6 +47,7 @@ const App = () => {
               <GameScreen />
               <AcercaDeScreen />
               <ConfiguracionScreen />
+              <CalificacionScreen />
             </div>
 
 

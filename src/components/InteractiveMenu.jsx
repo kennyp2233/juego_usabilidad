@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { PlayCircle, Beaker, Settings, Info } from 'lucide-react';
+import React from 'react';
+import { PlayCircle, Beaker, Settings, Info, Star } from 'lucide-react';
 import { useSimulator } from '../context/SimulatorContext';
 import Button from './atoms/Button';
 import { useSoundEffects } from '../hooks/useSoundEffects';
+
 
 import Doc from '../images/personajes/doctor.png';
 
@@ -16,6 +17,10 @@ const CentralMenu = () => {
         setMenuOpen(false);
     };
 
+    const handleRating = () => {
+        setCurrentScreen('rating');
+        setMenuOpen(false);
+    };
 
     return (
         <>
@@ -30,7 +35,6 @@ const CentralMenu = () => {
                                 style={{ pointerEvents: 'auto' }} // Asegúrate de que el overlay no bloquee interacciones
                             />
                         )}
-
 
                         {/* Menú central */}
                         <div className={`relative w-fit h-fit bg-white rounded-lg shadow-2xl p-8 transform transition-all duration-300 ${menuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
@@ -50,7 +54,10 @@ const CentralMenu = () => {
                                     bgColor="bg-yellow-100"
                                 />
                                 <Button
-                                    onClick={() => setCurrentScreen('settings')}
+                                    onClick={() => {
+                                        setCurrentScreen('settings')
+                                        setMenuOpen(false)
+                                    }}
                                     icon={Settings}
                                     label="Configuración"
                                     bgColor="bg-gray-100"
@@ -64,6 +71,12 @@ const CentralMenu = () => {
                                     label="Acerca de"
                                     bgColor="bg-blue-100"
                                 />
+                                <Button
+                                    onClick={handleRating}
+                                    icon={Star}
+                                    label="Califica el Juego"
+                                    bgColor="bg-purple-100"
+                                />
                             </div>
 
                             <p className="mt-6 text-sm text-gray-500 text-center">
@@ -76,11 +89,10 @@ const CentralMenu = () => {
                                 onPointerEnter={playSqueak}
                             />
                         </div>
-
-
                     </div>
                 </>
             )}
+
 
         </>
     );
