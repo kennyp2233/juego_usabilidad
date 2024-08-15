@@ -184,23 +184,26 @@ const PeaGeneticsSimulator = () => {
         )}
 
         {generations.length > 0 && (
-          <motion.div className='flex justify-center items-end gap-1'>
-            <motion.button
-              onClick={() => {
-                setShowCombinations(!showCombinations)
-                playButtonClick()
-              }}
-              className="bg-green-600 w-fit text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1 }}
-              onMouseEnter={playHover}
+          <motion.div className='flex justify-center items-end gap-1'
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1 }}>
+            {!showCombinations && (
+              <motion.button
+                onClick={() => {
+                  setShowCombinations(!showCombinations)
+                  playButtonClick()
+                }}
+                className="bg-green-600 w-fit text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
 
-            >
-              <Table2Icon className="" size={20} />
-            </motion.button>
+                onMouseEnter={playHover}
+
+              >
+                <Table2Icon className="" size={20} />
+              </motion.button>
+            )}
             <motion.button
               onClick={() => {
                 handleInitialGeneration()
@@ -209,9 +212,6 @@ const PeaGeneticsSimulator = () => {
               className="bg-green-600 w-fit text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1 }}
               onMouseEnter={playHover}
 
             >
