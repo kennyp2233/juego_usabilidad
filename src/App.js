@@ -7,17 +7,13 @@ import VideoFondo from './videos/fondo.mp4';
 import GameScreen from './components/GameScreen';
 import MenuButton from './components/MenuButton';
 import AcercaDeScreen from './components/screens/AcercaDeScreen';
+import ConfiguracionScreen from './components/screens/ConfiguracionesScreen';
 const App = () => {
   const { playAmbience } = useSoundEffects();
 
   const [soundInitialized, setSoundInitialized] = useState(false);
 
-  useEffect(() => {
-    // Si el sonido ya fue inicializado, no hacemos nada.
-    if (soundInitialized) return;
 
-    playAmbience();
-  }, [soundInitialized, playAmbience]);
 
   return (
     <SimulatorProvider>
@@ -47,6 +43,7 @@ const App = () => {
 
             <GameScreen />
             <AcercaDeScreen />
+            <ConfiguracionScreen />
           </div>
 
 

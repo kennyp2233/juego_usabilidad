@@ -53,7 +53,10 @@ const CentralMenu = () => {
                         bgColor="bg-gray-100"
                     />
                     <Button
-                        onClick={() => setCurrentScreen('about')}
+                        onClick={() => {
+                            setCurrentScreen('about')
+                            setMenuOpen(false)
+                        }}
                         icon={Info}
                         label="Acerca de"
                         bgColor="bg-blue-100"

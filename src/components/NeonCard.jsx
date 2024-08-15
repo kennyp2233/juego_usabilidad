@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+
 const NeonGradientCard = ({
   className = "",
   children,
@@ -14,30 +15,38 @@ const NeonGradientCard = ({
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const { offsetWidth, offsetHeight } = containerRef.current;
-        setDimensions({ width: offsetWidth, height: offsetHeight });
-      }
-    };
-
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-
-    return () => {
-      window.removeEventListener("resize", updateDimensions);
-    };
-  }, []);
-
-  useEffect(() => {
+  // Function to update dimensions
+  const updateDimensions = () => {
     if (containerRef.current) {
       const { offsetWidth, offsetHeight } = containerRef.current;
       setDimensions({ width: offsetWidth, height: offsetHeight });
     }
-  }, [children]);
+  };
+
+  useEffect(() => {
+    updateDimensions(); // Initial dimension set
+
+    // Set up resize observer for window resize
+    window.addEventListener("resize", updateDimensions);
+
+    // Set up mutation observer for content changes
+    const observer = new MutationObserver(() => {
+      updateDimensions();
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateDimensions);
+      observer.disconnect();
+    };
+  }, [children]); // Re-run the effect when `children` changes
 
   return (
     <motion.div
@@ -59,7 +68,7 @@ const NeonGradientCard = ({
         "relative z-10 h-fit w-fit min-w-[700px] rounded-[var(--border-radius)] " + className
       }
       animate={{ height: 'auto' }}
-      transition={{ height: { duration: 2 } }}
+      transition={{ height: { duration: 0.2 } }}
       {...props}
     >
       <motion.div

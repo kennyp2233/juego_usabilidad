@@ -1,4 +1,3 @@
-// useSoundEffects.js
 import { useRef } from 'react';
 import Pop from '../sounds/pop.mp3';
 import Hover from '../sounds/hover.mp3';
@@ -9,6 +8,7 @@ import PopFinish from '../sounds/pop-finish.mp3';
 
 export const useSoundEffects = () => {
     const audioRefs = useRef({});
+    const ambienceAudioRef = useRef(null);
 
     const defaultVolume = {
         [Pop]: 0.5,
@@ -56,13 +56,28 @@ export const useSoundEffects = () => {
             });
         });
         audioRefs.current = {};
+        if (ambienceAudioRef.current) {
+            ambienceAudioRef.current.pause();
+            ambienceAudioRef.current.currentTime = 0;
+        }
+    };
+
+    const playAmbience = (volume = defaultVolume[Ambience], loop = true) => {
+        if (ambienceAudioRef.current) {
+            ambienceAudioRef.current.pause();
+            ambienceAudioRef.current.currentTime = 0;
+        }
+        ambienceAudioRef.current = new Audio(Ambience);
+        ambienceAudioRef.current.volume = volume;
+        ambienceAudioRef.current.loop = loop;
+        ambienceAudioRef.current.play().catch(err => console.warn('Error al reproducir el audio:', err));
     };
 
     return {
         playButtonClick: (volume = defaultVolume[Pop], loop = false) => playSound(Pop, volume, loop),
         playHover: (volume = defaultVolume[Hover], loop = false) => playSound(Hover, volume, loop),
         playSqueak: (volume = defaultVolume[Squeak], loop = false) => playSound(Squeak, volume, loop),
-        playAmbience: (volume = defaultVolume[Ambience], loop = true) => playSound(Ambience, volume, loop),
+        playAmbience,
         playMixPeas: (volume = defaultVolume[MixPeas], loop = false) => playSound(MixPeas, volume, loop),
         playPopFinish: (volume = defaultVolume[PopFinish], loop = false) => playSound(PopFinish, volume, loop),
         stopAllSounds,
